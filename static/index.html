@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Price Comparator</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🛒 AI Price Comparator</h1>
+
+      <!-- Theme Toggle -->
+      <div class="theme-switch" onclick="toggleTheme()">
+        <div class="switch-track">
+          <span class="icon sun">☀️</span>
+          <span class="icon moon">🌙</span>
+          <div class="switch-thumb"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="search">
+      <input id="query" placeholder="Search product (e.g. iPhone 14)">
+      <button onclick="search()">Compare</button>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div id="scrollHint" class="scroll-hint hidden">
+    <span>Scroll to see more</span>
+    <div class="arrow">↓</div>
+  </div>
+
+  <!-- Vertical carousel -->
+  <div id="carousel" class="carousel hidden"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

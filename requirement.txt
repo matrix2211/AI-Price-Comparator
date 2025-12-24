@@ -1,0 +1,8 @@
+pydantic
+fastapi
+bs4
+uvicorn 
+requests
+numpy
+pydantic-settings 
+python-dotenv

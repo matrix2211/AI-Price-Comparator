@@ -1,4 +1,12 @@
+# Python virtual environment
 venv/
-.env/
+.env
+
+# Python cache files
 __pycache__/
 *.pyc
+
+# OS / editor junk (optional but recommended)
+.DS_Store
+.vscode/
+.idea/

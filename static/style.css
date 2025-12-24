@@ -32,8 +32,9 @@ body {
 .container {
   max-width: 1000px;
   margin: auto;
-  padding: 25px 20px;
+  padding: 18px 20px;
 }
+
 
 .header {
   display: flex;
@@ -74,10 +75,11 @@ body.dark .switch-thumb {
 /* Search */
 .search {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 14px;
 }
+
 
 .search input {
   width: 60%;
@@ -127,10 +129,10 @@ body.dark .switch-thumb {
 /* ===== Vertical carousel ===== */
 
 .carousel {
-  height: calc(100vh - 170px);
+  height: calc(100vh - 140px); /* slightly smaller */
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-  perspective: 1000px;
+  padding-bottom: 40px; /* breathing room at end */
 }
 
 .carousel::-webkit-scrollbar {
@@ -142,12 +144,11 @@ body.dark .switch-thumb {
 }
 
 .slide {
-  height: calc(100vh - 170px);
   scroll-snap-align: start;
   display: flex;
   justify-content: center;
-  align-items: center;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  align-items: flex-start;
+  padding: 20px 0;
 }
 
 /* Card */
@@ -156,12 +157,12 @@ body.dark .switch-thumb {
   max-width: 720px;
   background: var(--card);
   border-radius: 16px;
-  padding: 24px 28px;
+  padding: 18px 22px; /* reduced */
   box-shadow:
-    0 10px 30px rgba(0,0,0,0.15),
-    0 30px 60px rgba(0,0,0,0.10);
-  transform: translateZ(0);
+    0 8px 24px rgba(0,0,0,0.14),
+    0 20px 40px rgba(0,0,0,0.08);
 }
+
 
 .best {
   border-left: 6px solid #22c55e;

@@ -1,12 +1,16 @@
 import re
 import requests
 import numpy as np
+from variant_agent import analyze_variants
 
 OLLAMA_URL = "http://localhost:11434/api/embeddings"
 MODEL = "nomic-embed-text"
 
 # ---------- In-memory embedding cache ----------
 _embedding_cache: dict[str, list[float]] = {}
+
+# ---------- Verdict cache ----------
+_verdict_cache = {}
 
 
 # ---------- Utilities ----------
@@ -111,7 +115,7 @@ def group_products(products, threshold=0.86):
                 "items": [product]
             })
 
-    # cleanup
+    # cleanup internal keys
     for g in groups:
         del g["embedding"]
         del g["signature"]
@@ -119,13 +123,12 @@ def group_products(products, threshold=0.86):
     return groups
 
 
+# ---------- Best offer ----------
 def pick_best(products):
     return min(products, key=lambda x: x["price"])
 
+
 # ---------- Verdict generation ----------
-
-_verdict_cache = {}
-
 def generate_verdict(offers):
     """
     Generate a short, human-readable verdict explaining why this is the best deal.
@@ -152,3 +155,43 @@ def generate_verdict(offers):
 
     _verdict_cache[key] = verdict
     return verdict
+
+
+# ---------- Variant AI integration (NEW) ----------
+def enrich_group_with_variants(group_items):
+    """
+    Adds AI-driven variant insight to a grouped product.
+    Safe, additive, no side effects.
+    """
+    try:
+        return analyze_variants(
+            product_name=group_items[0]["title"],
+            offers=group_items
+        )
+    except Exception:
+        # Never let AI logic break the pipeline
+        return None
+
+
+# ---------- Final group response builder (NEW) ----------
+def build_group_response(group):
+    """
+    Builds the final response object for ONE grouped product.
+    This keeps main.py clean and stable.
+    """
+    offers = group["items"]
+    best = pick_best(offers)
+    verdict = generate_verdict(offers)
+
+    response = {
+        "product": best["title"],
+        "offers": offers,
+        "best": best,
+        "verdict": verdict
+    }
+
+    variant_insight = enrich_group_with_variants(offers)
+    if variant_insight:
+        response["variant_insight"] = variant_insight
+
+    return response

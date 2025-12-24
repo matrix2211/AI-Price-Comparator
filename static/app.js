@@ -12,29 +12,41 @@ window.onload = () => {
   }
 };
 
+/* 🔑 THIS WAS THE MISSING PIECE */
+function quickSearch(text) {
+  const input = document.getElementById("query");
+  if (!input) return;
+
+  input.value = text;
+  input.focus();
+  search();
+}
+
 async function search() {
   const q = document.getElementById("query").value.trim();
   if (!q) return;
 
   const carousel = document.getElementById("carousel");
-  const hint = document.getElementById("scrollHint");
-
   carousel.innerHTML = "";
   carousel.classList.remove("hidden");
-  hint.classList.remove("hidden");
 
   const res = await fetch(`/compare?query=${encodeURIComponent(q)}`);
   const data = await res.json();
 
-  data.forEach((group, idx) => {
+  data.forEach(group => {
     const slide = document.createElement("div");
     slide.className = "slide";
 
     let offersHTML = "";
+
     group.offers.forEach(o => {
+      const seller = o.link
+        ? `<a href="${o.link}" target="_blank" rel="noopener noreferrer">${o.source}</a>`
+        : o.source;
+
       offersHTML += `
         <div class="offer">
-          <span>${o.source}</span>
+          <span class="seller">${seller}</span>
           <strong>₹${o.price}</strong>
         </div>
       `;
@@ -51,11 +63,4 @@ async function search() {
 
     carousel.appendChild(slide);
   });
-
-  // Hide scroll hint after first scroll
-  carousel.addEventListener("scroll", () => {
-    hint.classList.add("hidden");
-  }, { once: true });
-
-  carousel.scrollTo({ top: 0, behavior: "smooth" });
 }

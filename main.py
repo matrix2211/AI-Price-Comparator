@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-
+from ai import build_group_response
 from providers import search_products
 from ai import group_products, pick_best, generate_verdict
 
@@ -18,10 +18,11 @@ def home():
 # API endpoint
 @app.get("/compare")
 def compare(query: str):
-    raw = search_products(query)
-    groups = group_products(raw)
+    raw_products = search_products(query)
 
-    response = []
+    groups = group_products(raw_products)
+    response = [build_group_response(g) for g in groups]
+
 
     for group in groups:
         best = pick_best(group["items"])
